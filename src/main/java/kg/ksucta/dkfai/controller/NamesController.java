@@ -3,6 +3,7 @@ package kg.ksucta.dkfai.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +35,18 @@ public class NamesController {
         }
         return names.get(idx);
     }
+
+
+    @CrossOrigin(origins = "*", methods = {RequestMethod.POST})
+    @RequestMapping(path = "/create", method = RequestMethod.POST)
+    @ResponseBody
+    public String create(@RequestBody NameRecord nameRecord, HttpServletResponse response) {
+        System.out.println("received " + nameRecord);
+        names.add(nameRecord);
+        response.setStatus(HttpStatus.CREATED.value());
+        return "created";
+    }
+
 }
 
 class NameRecord {
@@ -46,6 +59,9 @@ class NameRecord {
     private int stars = 0;
     public int ratings = 0;
 
+    public NameRecord() {
+        id = count++;
+    }
     public NameRecord(String name, String url, String about) {
         id = count++;
         this.name = name;
@@ -58,6 +74,11 @@ class NameRecord {
             return 0;
         else
             return ((float) stars) / ((float) ratings);
+    }
+
+    @Override
+    public String toString() {
+        return name + "(" + id + ")  -> " + imageUrl;
     }
 
     public static List<NameRecord> initialise() {
