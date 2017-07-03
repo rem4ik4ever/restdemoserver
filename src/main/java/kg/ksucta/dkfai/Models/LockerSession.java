@@ -1,37 +1,55 @@
 package kg.ksucta.dkfai.Models;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+
 import java.util.Date;
 import java.util.Random;
 
+@Document(collection="locker_sessions")
 public class LockerSession {
 
     @Id
-    public int id;
+    public String id;
 
     public Date timeStarted;
     public Date timeEnded;
     public String userName;
-    public Number cost;
+    public String cost;
     public int pin;
 
-    public static int count = 0;
+    @DBRef
+    @Field("locker")
+    private PhoneLocker phoneLocker;
 
-    public LockerSession() {};
+    public LockerSession() {
+        Random random = new Random();
+        this.pin = random.nextInt(9999 - 1000 + 1) + 1000;
+    };
 
     public LockerSession(Date timeStarted, String userName){
-        this.id = count++;
         this.timeStarted = timeStarted;
         this.userName = userName;
         Random random = new Random();
         this.pin = random.nextInt(9999 - 1000 + 1) + 1000;
     }
 
-
-    public void finishSession(Date timeEnded){
-        this.timeEnded = timeEnded;
-
+    public String getId(){
+        return id;
     }
 
+    public String getUsername(){
+        return userName;
+    }
 
+    public void setUsername(String name){
+        this.userName = name;
+    }
+
+    public void setPhoneLocker(PhoneLocker locker){
+        this.phoneLocker = locker;
+    }
 }
+

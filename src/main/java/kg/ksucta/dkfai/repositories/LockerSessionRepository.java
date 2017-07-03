@@ -1,14 +1,20 @@
 package kg.ksucta.dkfai.repositories;
 
+
 import kg.ksucta.dkfai.Models.LockerSession;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.repository.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
-/**
- * Created by kimrem on 2017-07-02.
- */
-public interface LockerSessionRepository extends MongoRepository<LockerSession, String> {
-    public LockerSession findById(String Id);
-//    public List<LockerSession> findUserSessions(String userId);
+public interface LockerSessionRepository extends Repository<LockerSession, String> {
+
+    void delete(LockerSession delete);
+
+    List<LockerSession> findAll();
+
+    LockerSession save(LockerSession saved);
+
+    Optional<LockerSession> findOne(String id);
+
 }
